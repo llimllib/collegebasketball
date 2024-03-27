@@ -8,10 +8,10 @@ To get the torvik data, go to https://barttorvik.com/, set the filters you want,
 
 To get the last 10 days' data from that site, add `&lastx=10` to the URL to limit to the last 10 games; this is not accessible from anywhere in the UI that I can find.
 
-The headers, according to [this blog post](http://adamcwisports.blogspot.com/p/data.html) which links to [this spreadsheet](https://www.dropbox.com/s/ryugeykvntto5ji/pstatheaders.xlsx?dl=0), are:
+The headers for the main page data are, as best as I could reverse engineer are:
 
 ```
-player_name,team,conf,GP,Min_per,ORtg,usg,eFG,TS_per,ORB_per,DRB_per,AST_per,TO_per,FTM,FTA,FT_per,twoPM,twoPA,twoP_per,TPM,TPA,TP_per,blk_per,stl_per,ftr,yr,ht,num,porpag,adjoe,pfr,year,pid,type,RecRank,ast/tov,rimmade,rimmade+ri,midmade,midmade+m,rimmade/(ri,midmade/(m,dunksmade,dunksmiss+,dunksmade/,pick,drtg,adrtg,dporpag,stops,bpm,obpm,dbpm,gbpm,mp,ogbpm,dgbpm,oreb,dreb,treb,ast,stl,blk,pts
+team_name,adjoe,adjde,barthag,record,unknown,games,efg,efgd,ftr,ftrd,to_rate,to_rate_d,orb,orb_d,unknown,two_pt_pct,two_pt_pct_d,three_pt_pct,three_pt_pct_d,block_pct_d,block_pct,ast_rate,ast_rate_d,three_pt_rate,three_pt_rate_d,adj_tempo,unknown,unknown,unknown,season,unknown,unknown,unknown,wab,ft_pct,ft_pct_d
 ```
 
 with a note that data from <2010 may be missing a few columns:
@@ -80,6 +80,9 @@ const plot = Plot.plot({
   ],
 });
 display(plot);
+```
+
+```js
 function fixName(name) {
   const fixes = {
     "Iowa St.": "iowa-st",
@@ -135,7 +138,9 @@ const p2 = Plot.plot({
   ],
 });
 display(p2);
+```
 
+```js
 const p3 = Plot.plot({
   title: "Offensive and Defensive Efficency",
   subtitle: "sweet 16 teams, last 10 games",
@@ -196,4 +201,52 @@ const p3 = Plot.plot({
   ],
 });
 display(p3);
+```
+
+```js
+const p4 = Plot.plot({
+  title: "Offensive and Defensive Efficency",
+  subtitle: "sweet 16 teams, last 10 games. Average in red",
+  x: {
+    grid: true,
+    label: "Torvik Adjusted OE (higher is better)",
+  },
+  y: {
+    grid: true,
+    label: "Torvik Adjusted DE (lower is better)",
+    reverse: true,
+  },
+  marginTop: "40",
+  marks: [
+    Plot.image(active, {
+      x: "adjoe",
+      y: "adjde",
+      width: 25,
+      tip: true,
+      title: (d) => `${d.name}: ${d.adjoe}`,
+      src: (d) =>
+        `https://raw.githubusercontent.com/jwmickey/circle-bracket/85d447fb6bfcb0462b77b84e5f76d30b2bd10285/src/img/logos/${fixName(d.name)}.svg`,
+    }),
+    Plot.dot(inactive, {
+      x: "adjoe",
+      y: "adjde",
+      tip: true,
+      title: (d) => `${d.name}: ${d.adjoe}`,
+      fill: "#66666666",
+    }),
+    Plot.ruleX([avgOE], {
+      stroke: "#ff0000cc",
+      strokeDasharray: "3,9",
+      y1: avgDE - 8,
+      y2: avgDE + 8,
+    }),
+    Plot.ruleY([avgDE], {
+      stroke: "red",
+      strokeDasharray: "3,9",
+      x1: avgOE - 5,
+      x2: avgOE + 5,
+    }),
+  ],
+});
+display(p4);
 ```
