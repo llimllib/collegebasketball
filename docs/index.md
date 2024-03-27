@@ -6,6 +6,22 @@ To get the torvik data, go to https://barttorvik.com/, set the filters you want,
 
 To get the last 10 days' data from that site, add `&lastx=10` to the URL to limit to the last 10 games; this is not accessible from anywhere in the UI that I can find.
 
+The headers, according to [this blog post](http://adamcwisports.blogspot.com/p/data.html) which links to [this spreadsheet](https://www.dropbox.com/s/ryugeykvntto5ji/pstatheaders.xlsx?dl=0), are:
+
+```
+player_name,team,conf,GP,Min_per,ORtg,usg,eFG,TS_per,ORB_per,DRB_per,AST_per,TO_per,FTM,FTA,FT_per,twoPM,twoPA,twoP_per,TPM,TPA,TP_per,blk_per,stl_per,ftr,yr,ht,num,porpag,adjoe,pfr,year,pid,type,RecRank,ast/tov,rimmade,rimmade+ri,midmade,midmade+m,rimmade/(ri,midmade/(m,dunksmade,dunksmiss+,dunksmade/,pick,drtg,adrtg,dporpag,stops,bpm,obpm,dbpm,gbpm,mp,ogbpm,dgbpm,oreb,dreb,treb,ast,stl,blk,pts
+```
+
+with a note that data from <2010 may be missing a few columns:
+
+> I think what's going on is that in 2008 and 2009 the blank columns (stats from play by play, such as shot locations, dunks, etc) are being skipped when the csv is created. All years from 2010 to present should have the same columns as shown in that dropbox link.
+
+TODO:
+
+- why are builds so slow?
+- how can I hack image support into framework?
+  - look into how the build process works
+
 ```js
 const torvik = await FileAttachment("data/torvik_2024_last10.csv").csv({
   typed: true,
