@@ -2,6 +2,8 @@
 toc: false
 ---
 
+This started based on a [tootstorm](https://elk.zone/hachyderm.io/@llimllib/112165080007633415)
+
 To get the torvik data, go to https://barttorvik.com/, set the filters you want, and add `&csv=1` to the URL.
 
 To get the last 10 days' data from that site, add `&lastx=10` to the URL to limit to the last 10 games; this is not accessible from anywhere in the UI that I can find.
