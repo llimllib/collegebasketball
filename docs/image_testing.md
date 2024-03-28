@@ -70,7 +70,15 @@ const y = await Promise.all(
 display(y);
 ```
 
-But if it's a zip containing a png instead of an SVG, it works:
+If we don't try to convert it into an `Image`, it works. We can see that it has a URL property, which is what `stdlib.js` tries to attach to `Image.src`:
+
+```js echo
+const z = await Promise.all(miss.filenames.map((logo) => miss.file(logo)));
+display(z);
+display(await z[0].url());
+```
+
+If it's a zip containing a png instead of an SVG, it works:
 
 ```js echo
 const onepng = await FileAttachment("data/onepng.zip").zip();
