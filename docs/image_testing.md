@@ -1,5 +1,7 @@
 # testing images
 
+The source for this page is [here](https://github.com/llimllib/collegebasketball)
+
 Pulling a single image out of the logos zip file works:
 
 ```js echo
