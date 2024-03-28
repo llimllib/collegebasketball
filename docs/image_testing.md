@@ -1,33 +1,35 @@
 # testing images
 
-```js echo
-const torvik = await FileAttachment("data/torvik_2024.csv").csv({
-  typed: true,
-});
-display(torvik);
-```
-
 Pulling a single image out of the logos zip file works:
 
 ```js echo
-const marq = await FileAttachment("data/logos/marquette.svg").image();
+const marq = await FileAttachment("data/logos/marquette.svg").image({
+  width: 30,
+});
 display(marq);
 ```
 
-Loading every file from the muybridge zip works:
+Loading every file from the muybridge zip from the [docs](https://observablehq.com/framework/lib/zip) works:
 
 ```js echo
 const muybridge = await FileAttachment("data/muybridge.zip").zip();
+display(muybridge.filenames);
 const x = await Promise.all(
   muybridge.filenames.map((f) => muybridge.file(f).image()),
 );
 display(x);
 ```
 
-But loading every file from our zip doesn't work:
+But loading every file from my zip full of logos doesn't work:
 
 ```js echo
 const logos = await FileAttachment("data/logos.zip").zip();
+display(logos.filenames);
+```
+
+Debugging shows that there are many failures here, but observable only displays the first:
+
+```js echo
 const y = await Promise.all(
   logos.filenames.map((logo) => logos.file(logo).image()),
 );
@@ -50,4 +52,34 @@ but not out of our zip file:
 
 ```js echo
 display(await logos.file("_tbd.svg").image());
+```
+
+Using a smaller file doesn't help, this one only has a single file:
+
+```js echo
+const miss = await FileAttachment("data/miss.zip").zip();
+display(miss.filenames);
+console.log(miss);
+// display(await miss.file(miss.filenames[0]).image());
+```
+
+```js echo
+const y = await Promise.all(
+  miss.filenames.map((logo) => miss.file(logo).image()),
+);
+display(y);
+```
+
+But if it's a zip containing a png instead of an SVG, it works:
+
+```js echo
+const onepng = await FileAttachment("data/onepng.zip").zip();
+display(await onepng.file(onepng.filenames[0]).image());
+```
+
+```js echo
+const y = await Promise.all(
+  onepng.filenames.map((logo) => onepng.file(logo).image()),
+);
+display(y);
 ```
