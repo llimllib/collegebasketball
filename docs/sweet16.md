@@ -33,6 +33,7 @@ const teams = [
   torvik.filter((x) => x.name == rawteams.a)[0],
   torvik.filter((x) => x.name == rawteams.b)[0],
 ];
+const others = torvik.filter((x) => ![rawteams.a, rawteams.b].includes(x.name));
 ```
 
 <table>
@@ -194,8 +195,6 @@ const torvik = await FileAttachment("data/torvik_2024.csv").csv({
 });
 // add `drb` for defensive rebounding rate
 torvik.forEach((s) => (s.drb = 100 - s.orb_d));
-const avgOE = d3.sum(torvik, (d) => d.adjoe) / torvik.length;
-const avgDE = d3.sum(torvik, (d) => d.adjde) / torvik.length;
 const fmt = d3.format(".1f");
 ```
 
@@ -269,9 +268,6 @@ function graphstat(teams, others, stat, options) {
 ```
 
 ```js
-const others = torvik.filter(
-  (x) => !["Connecticut", "San Diego St."].includes(x.name),
-);
 const games = [
   { a: "Connecticut", b: "San Diego St." },
   { a: "Iowa St.", b: "Illinois" },
