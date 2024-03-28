@@ -1,4 +1,4 @@
-# sweet 16 matchups
+# Sweet 16 Matchups
 
 <style>
 table { min-width: 800px }
@@ -20,106 +20,9 @@ tr.sep td:first-child {
 }
 </style>
 
-```js
-const torvik = await FileAttachment("data/torvik_2024.csv").csv({
-  typed: true,
-});
-// add `drb` for defensive rebounding rate
-torvik.forEach((s) => (s.drb = 100 - s.orb_d));
-const avgOE = d3.sum(torvik, (d) => d.adjoe) / torvik.length;
-const avgDE = d3.sum(torvik, (d) => d.adjde) / torvik.length;
-const fmt = d3.format(".1f");
-```
+Select a matchup to see detailed statistics:
 
 ```js
-function fixName(name) {
-  const fixes = {
-    "Iowa St.": "iowa-st",
-    "North Carolina": "north-carolina",
-    "North Carolina St.": "north-carolina-st",
-    "San Diego St.": "san-diego-st",
-    Connecticut: "uconn",
-  };
-  return fixes[name] || name.toLowerCase();
-}
-
-function logoURL(name) {
-  return `https://raw.githubusercontent.com/jwmickey/circle-bracket/85d447fb6bfcb0462b77b84e5f76d30b2bd10285/src/img/logos/${fixName(name)}.svg`;
-}
-
-function logo(name) {
-  const i = new Image();
-  i.src = logoURL(name);
-  i.width = 40;
-  return i;
-}
-
-function graphstat(teams, others, stat, options) {
-  const average = d3.sum(torvik, (d) => d[stat]) / torvik.length;
-  const diff = Math.max(
-    d3.max(torvik, (d) => d[stat]) - average,
-    average - d3.min(torvik, (d) => d[stat]),
-  );
-  return Plot.plot({
-    title: options.title,
-    x: {
-      grid: true,
-      label: options.label,
-      reverse: options.reverse,
-      domain: [average - diff, average + diff],
-    },
-    y: {
-      domain: [-1, 1],
-      grid: false,
-      ticks: false,
-    },
-    height: "80",
-    marks: [
-      Plot.dot(others, { x: stat, fill: "#66666633" }),
-      Plot.image(teams, {
-        src: (d) =>
-          `https://raw.githubusercontent.com/jwmickey/circle-bracket/85d447fb6bfcb0462b77b84e5f76d30b2bd10285/src/img/logos/${fixName(d.name)}.svg`,
-        width: 40,
-        x: stat,
-        tip: true,
-      }),
-      Plot.ruleX([average], {
-        stroke: "red",
-        y1: 0.5,
-        y2: -0.5,
-      }),
-      options.labelAverage
-        ? Plot.text([[average]], {
-            text: ["NCAA average"],
-            x: average,
-            y: 0.8,
-          })
-        : null,
-    ],
-  });
-}
-```
-
-```js
-// const teams = torvik.filter((x) =>
-//   ["Connecticut", "San Diego St."].includes(x.name),
-// );
-const others = torvik.filter(
-  (x) => !["Connecticut", "San Diego St."].includes(x.name),
-);
-```
-
-```js
-const games = [
-  { a: "Connecticut", b: "San Diego St." },
-  { a: "Iowa St.", b: "Illinois" },
-  { a: "Houston", b: "Duke" },
-  { a: "Marquette", b: "North Carolina St." },
-  { a: "Purdue", b: "Gonzaga" },
-  { a: "Tennessee", b: "Creighton" },
-  { a: "North Carolina", b: "Alabama" },
-  { a: "Arizona", b: "Clemson" },
-];
 const rawteams = view(
   Inputs.select(games, { format: (t) => `${t.a} vs ${t.b}` }),
 );
@@ -282,3 +185,101 @@ const teams = [
     <td>${graphstat(teams, others, "ft_pct", { })}</td>
   </tr>
 </table>
+
+[source code](https://github.com/llimllib/collegebasketball) by [Bill Mill](https://billmill.org). generated with [observable framework](https://github.com/observablehq/framework)
+
+```js
+const torvik = await FileAttachment("data/torvik_2024.csv").csv({
+  typed: true,
+});
+// add `drb` for defensive rebounding rate
+torvik.forEach((s) => (s.drb = 100 - s.orb_d));
+const avgOE = d3.sum(torvik, (d) => d.adjoe) / torvik.length;
+const avgDE = d3.sum(torvik, (d) => d.adjde) / torvik.length;
+const fmt = d3.format(".1f");
+```
+
+```js
+function fixName(name) {
+  const fixes = {
+    "Iowa St.": "iowa-st",
+    "North Carolina": "north-carolina",
+    "North Carolina St.": "north-carolina-st",
+    "San Diego St.": "san-diego-st",
+    Connecticut: "uconn",
+  };
+  return fixes[name] || name.toLowerCase();
+}
+
+function logoURL(name) {
+  return `https://raw.githubusercontent.com/jwmickey/circle-bracket/85d447fb6bfcb0462b77b84e5f76d30b2bd10285/src/img/logos/${fixName(name)}.svg`;
+}
+
+function logo(name) {
+  const i = new Image();
+  i.src = logoURL(name);
+  i.width = 40;
+  return i;
+}
+
+function graphstat(teams, others, stat, options) {
+  const average = d3.sum(torvik, (d) => d[stat]) / torvik.length;
+  const diff = Math.max(
+    d3.max(torvik, (d) => d[stat]) - average,
+    average - d3.min(torvik, (d) => d[stat]),
+  );
+  return Plot.plot({
+    title: options.title,
+    x: {
+      grid: true,
+      label: options.label,
+      reverse: options.reverse,
+      domain: [average - diff, average + diff],
+    },
+    y: {
+      domain: [-1, 1],
+      grid: false,
+      ticks: false,
+    },
+    height: "80",
+    marks: [
+      Plot.dot(others, { x: stat, fill: "#66666633" }),
+      Plot.image(teams, {
+        src: (d) =>
+          `https://raw.githubusercontent.com/jwmickey/circle-bracket/85d447fb6bfcb0462b77b84e5f76d30b2bd10285/src/img/logos/${fixName(d.name)}.svg`,
+        width: 40,
+        x: stat,
+        tip: true,
+      }),
+      Plot.ruleX([average], {
+        stroke: "red",
+        y1: 0.5,
+        y2: -0.5,
+      }),
+      options.labelAverage
+        ? Plot.text([[average]], {
+            text: ["NCAA average"],
+            x: average,
+            y: 0.8,
+          })
+        : null,
+    ],
+  });
+}
+```
+
+```js
+const others = torvik.filter(
+  (x) => !["Connecticut", "San Diego St."].includes(x.name),
+);
+const games = [
+  { a: "Connecticut", b: "San Diego St." },
+  { a: "Iowa St.", b: "Illinois" },
+  { a: "Houston", b: "Duke" },
+  { a: "Marquette", b: "North Carolina St." },
+  { a: "Purdue", b: "Gonzaga" },
+  { a: "Tennessee", b: "Creighton" },
+  { a: "North Carolina", b: "Alabama" },
+  { a: "Arizona", b: "Clemson" },
+];
+```
