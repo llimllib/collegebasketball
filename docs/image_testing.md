@@ -93,3 +93,18 @@ const y = await Promise.all(
 );
 display(y);
 ```
+
+```js echo
+// TODO: Q is, can I take these URLs now and use them in a d3 plot.Image?
+const a = await Promise.all(
+  logos.filenames.map(async (logo) => {
+    const data = await logos.file(logo).arrayBuffer();
+    const blob = new Blob([data], { type: "image/svg+xml" });
+    const url = URL.createObjectURL(blob);
+    const image = new Image();
+    image.src = url;
+    return image;
+  }),
+);
+display(a);
+```
