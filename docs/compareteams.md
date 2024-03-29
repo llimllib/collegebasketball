@@ -32,24 +32,32 @@ Select a matchup to see detailed statistics:
 
 ```js
 const randElt = (arr) => arr[Math.floor(Math.random() * arr.length)];
+let teamaValue = randElt(torvik);
+let teambValue = randElt(torvik);
+if (window.location.hash.includes("&")) {
+  const [a, b] = window.location.hash.slice(1).split("&");
+  teamaValue = torvik.find((x) => x.name == decodeURIComponent(a));
+  teambValue = torvik.find((x) => x.name == decodeURIComponent(b));
+}
 const teama = view(
   Inputs.select(torvik, {
     format: (t) => `${t.name}`,
     label: "team 1",
-    value: randElt(torvik),
+    value: teamaValue,
   }),
 );
 const teamb = view(
   Inputs.select(torvik, {
     format: (t) => `${t.name}`,
     label: "team 2",
-    value: randElt(torvik),
+    value: teambValue,
   }),
 );
 ```
 
 ```js
 const teams = [teama, teamb];
+window.location.hash = `${encodeURIComponent(teama.name)}&${encodeURIComponent(teamb.name)}`;
 // set t.logoURL for the selected teams; graphstat assumes this is in place
 await Promise.all(
   teams.map(async (t) => (t.logoURL = await getValidLogoURL(t.name))),

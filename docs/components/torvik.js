@@ -13,7 +13,12 @@ function fixName(name) {
     "UC Santa Barbara": "uc-santa-barbara",
   };
   return (
-    fixes[name] || name.toLowerCase().replaceAll(" ", "-").replaceAll(".", "")
+    fixes[name] ||
+    name
+      .toLowerCase()
+      .replaceAll(" ", "-")
+      .replaceAll(".", "")
+      .replaceAll("&", "")
   );
 }
 
