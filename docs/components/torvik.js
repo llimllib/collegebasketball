@@ -70,12 +70,17 @@ export async function graphstat(data, teams, others, stat, options) {
     height: "80",
     marks: [
       Plot.dot(others, { x: stat, fill: "#66666633" }),
-      Plot.image(teams, {
-        src: (t) => t.logoURL,
-        width: 40,
-        x: stat,
-        tip: true,
-      }),
+      Plot.image(
+        teams,
+        Plot.dodgeY({
+          src: (t) => t.logoURL,
+          width: 40,
+          x: stat,
+          tip: true,
+          padding: 10,
+          anchor: "middle",
+        }),
+      ),
       Plot.ruleX([average], {
         stroke: "red",
         y1: 0.5,
