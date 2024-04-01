@@ -34,7 +34,7 @@ abbr {
 ```js
 const last10 = view(
   Inputs.radio(["all games", "last 10", "last 20"], {
-    label: "color",
+    label: "Data for",
     value: "all games",
   }),
 );
@@ -247,7 +247,7 @@ const others = torvik.filter((x) => !rawteams.includes(x.name));
   </tr>
 </table>
 
-[source code](https://github.com/llimllib/collegebasketball) by [Bill Mill](https://billmill.org). generated with [observable framework](https://github.com/observablehq/framework)
+Data from [Bart Torvik](https://barttorvik.com). [Source code](https://github.com/llimllib/collegebasketball) by [Bill Mill](https://billmill.org). Generated with [observable framework](https://github.com/observablehq/framework)
 
 ```js
 const torvik_all = await FileAttachment("data/torvik_teams_2024.csv").csv({
